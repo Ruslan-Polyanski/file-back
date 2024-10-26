@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ProfessionModule } from './profession/profession.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -12,6 +13,20 @@ import { ConfigModule } from '@nestjs/config';
     ProfessionModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        username: configService.get('DB_USERNSME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_NAME'),
+        synchronize: true,
+        entities: [__dirname + '/**/*.entity{.js, .ts}'],
+        inject: [ConfigService],
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

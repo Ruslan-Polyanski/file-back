@@ -6,6 +6,8 @@ import { ProfessionModule } from './profession/profession.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CompanyModule } from './company/company.module';
+import { EquipmentModule } from './equipment/equipment.module';
 
 @Module({
   imports: [
@@ -24,9 +26,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: configService.get('DB_NAME'),
         synchronize: true,
         entities: [__dirname + '/**/*.entity{.js, .ts}'],
-        inject: [ConfigService],
       }),
+      inject: [ConfigService],
     }),
+    CompanyModule,
+    EquipmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

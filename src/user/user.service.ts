@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UserService {
@@ -17,13 +18,13 @@ export class UserService {
       },
     });
 
-    if (existUser) throw BadRequestException('This email already exists');
+    if (existUser) throw new BadRequestException('This email already exists');
 
     const user = await this.userRepository.save({
       email: createUserDto.email,
-      password: createUserDto.password,
+      password: await argon2.hash(createUserDto.password),
     });
 
-    return 'This action adds a new user';
+    return { user };
   }
 }

@@ -23,6 +23,11 @@ export class UserService {
     const user = await this.userRepository.save({
       email: createUserDto.email,
       password: await argon2.hash(createUserDto.password),
+      first_name: createUserDto.first_name,
+      last_name: createUserDto.last_name,
+      surname_name: createUserDto.surname_name,
+      date_birthday: createUserDto.date_birthday,
+      role: createUserDto.role,
     });
 
     return { user };

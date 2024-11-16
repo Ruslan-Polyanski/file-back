@@ -23,7 +23,7 @@ export class User {
   surname_name: string;
 
   @Column()
-  date_birthday: Date;
+  date_birthday: string;
 
   @ManyToOne(() => Profession, (profession) => profession.users, {
     onDelete: 'CASCADE',

@@ -12,7 +12,7 @@ export class AuthService {
 
     if (user && passwordMatch) {
       return user;
-  }
+    }
 
     throw new BadRequestException('User or password are incorrect');
   }

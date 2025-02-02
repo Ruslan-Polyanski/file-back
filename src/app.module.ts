@@ -8,12 +8,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from './company/company.module';
 import { EquipmentModule } from './equipment/equipment.module';
+import { LevelModule } from './level/level.module';
+import { DateModule } from './date/date.module';
 
 @Module({
   imports: [
     UserModule,
     ProfessionModule,
     AuthModule,
+    CompanyModule,
+    EquipmentModule,
+    LevelModule,
+    DateModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -29,8 +35,6 @@ import { EquipmentModule } from './equipment/equipment.module';
       }),
       inject: [ConfigService],
     }),
-    CompanyModule,
-    EquipmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -28,7 +28,7 @@ export class DateService {
     });
     const usersToday = await this.dateRepository.find({
       where: {
-        dateTag: '16.0.2025',
+        dateTag: `${new Date().getDate()}.${new Date().getMonth()}.${new Date().getFullYear()}`,
       },
       select: {
         user_id: true,
@@ -50,12 +50,14 @@ export class DateService {
     };
   }
 
-  async createDate(employeeData) {
+  async createDate(dateTag, id) {
     const usersToday = await this.dateRepository.find({
       where: {
-        dateTag: employeeData.dateTag,
+        dateTag: dateTag,
+        user_id: id
       },
     });
+
     return usersToday;
     // return await this.dateRepository.save();
   }
@@ -73,3 +75,5 @@ export class DateService {
 //   equipment: 'ИФДС5419',
 //   supervisor: 'Татьяна	Лебедева	Петрович',
 // }
+
+

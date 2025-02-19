@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Request, Res } from '@nestjs/common';
 import { DateService } from './date.service';
 
 @Controller('date')
@@ -47,9 +47,8 @@ export class DateController {
   }
 
   @Post('today')
-  async createDate(@Body() employeeData: string) {
-    const data = JSON.parse(employeeData);
-    // const response = await this.dataService.createDate(data);
-    return JSON.stringify('response');
+  async createDate(@Body() employeeData) {
+    const response = await this.dataService.createDate(employeeData.dataTag, +employeeData.id);
+    return response;
   }
 }

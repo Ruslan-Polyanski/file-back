@@ -6,15 +6,18 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './user.entity';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('users')
   async getAllUsers(): Promise<{
     users: {
@@ -37,6 +40,7 @@ export class UserController {
     return { users: newData };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('user')
   @UsePipes(new ValidationPipe())
   create(@Body() createUserDto: CreateUserDto) {

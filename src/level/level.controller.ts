@@ -1,10 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { LevelService } from './level.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('levels')
 export class LevelController {
   constructor(private readonly levelService: LevelService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('supervisors')
   async getAllLevels(): Promise<{
     supervisors: { id: number; fullName: string }[];

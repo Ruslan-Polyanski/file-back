@@ -50,30 +50,41 @@ export class DateService {
     };
   }
 
-  async createDate(dateTag, id) {
-    const usersToday = await this.dateRepository.find({
+  async createDate(employeeData) {
+    
+    const dataUser = {
+      breakTime: employeeData.breakDate,
+      company: employeeData.companyValue,
+      dateTag: employeeData.dataTag,
+      startTime: employeeData.startDate,
+      endTime: employeeData.endDate,
+      equipment: employeeData.equipmentValue,
+      fullName: employeeData.fullName,
+      profession: employeeData.profession,
+      supervisor: employeeData.supervisorValue,
+      user_id: +employeeData.id,
+    }
+
+    const userToday = await this.dateRepository.findOne({
       where: {
-        dateTag: dateTag,
-        user_id: id
+        dateTag: employeeData.dataTag,
+        user_id: +employeeData.id
       },
     });
 
-    return usersToday;
-    // return await this.dateRepository.save();
+    if(userToday) {
+      await this.dateRepository.update(userToday.id, dataUser)
+      const updateUserToday = await this.dateRepository.findOne({
+        where: {
+          dateTag: employeeData.dataTag,
+          user_id: +employeeData.id
+        },
+      });
+      return updateUserToday;
+    }
+    
+    return await this.dateRepository.save(dataUser);
   }
 }
-
-// {
-//   dateTag: '16.0.2025',
-//   user_id: 3,
-//   fullName: 'Лиза	Фронтова	Петрович',
-//   profession: 'Сварщик',
-//   startTime: '1736838000000',
-//   endTime: '1736866800000',
-//   breakTime: '1736895600000',
-//   company: 'Гомсельмаш',
-//   equipment: 'ИФДС5419',
-//   supervisor: 'Татьяна	Лебедева	Петрович',
-// }
 
 

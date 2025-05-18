@@ -37,7 +37,6 @@ export class UserService {
       first_name: createUserDto.first_name,
       last_name: createUserDto.last_name,
       surname_name: createUserDto.surname_name,
-      // role: createUserDto.role,
     });
 
     const token = this.jwtService.sign({ email: createUserDto.email });

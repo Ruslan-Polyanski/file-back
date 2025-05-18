@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { DateService } from './date.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 
 @Controller('date')
 export class DateController {
   constructor(private readonly dataService: DateService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAccessAuthGuard)
   @Get('today')
   async getAllDate() {
     const { users, usersToday } = await this.dataService.getAllDate();
@@ -44,15 +44,23 @@ export class DateController {
     });
 
     return {
-      users: Object.values(newData),
+      users: Object.values(newData).map((employee) => {
+        if (typeof employee === 'object' && 'dateTag' in employee) {
+          const place = employee.dateTag ? 'На выезде' : 'В офисе';
+          return { ...employee, place };
+        }
+
+        return employee;
+      }),
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAccessAuthGuard)
   @Patch('today')
   async createDate(@Body() employeeData) {
     const response = await this.dataService.createDate(employeeData);
-    const {user_id, ...resp} = response;
-    return {...resp, id: user_id};
+    const { user_id, dateTag, ...resp } = response;
+    const place = dateTag ? 'На выезде' : 'В офисе';
+    return { ...resp, id: user_id, place, dateTag };
   }
 }

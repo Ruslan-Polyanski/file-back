@@ -28,25 +28,3 @@ import refreshJwtConfig from './config/refresh-jwt.config';
   ],
 })
 export class AuthModule {}
-
-// @Module({
-//   imports: [
-//     UserModule,
-//     PassportModule,
-//     JwtModule.registerAsync({
-//       imports: [ConfigModule],
-//       inject: [ConfigService],
-//       useFactory: (configService: ConfigService) => ({
-//         secret: configService.get('JWT_ACCESS_SECRET'),
-//         privateKey: configService.get('JWT_REFRESH_SECRET'),
-//       }),
-//     }),
-//   ],
-//   controllers: [AuthController],
-//   providers: [
-//     AuthService,
-//     LocalStrategy,
-//     JwtAccessStrategy,
-//     JwtRefreshStrategy,
-//   ],
-// })

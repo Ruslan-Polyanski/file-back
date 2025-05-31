@@ -1,20 +1,16 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-// import { v4 as uuidv4 } from 'uuid';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/types/types';
 import refreshJwtConfig from './config/refresh-jwt.config';
 import { ConfigType } from '@nestjs/config';
-import accessJwtConfig from './config/access-jwt.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    @Inject(accessJwtConfig.KEY)
-    private accessTokenConfig: ConfigType<typeof accessJwtConfig>,
     @Inject(refreshJwtConfig.KEY)
     private refreshTokenConfig: ConfigType<typeof refreshJwtConfig>,
   ) {}
@@ -52,13 +48,10 @@ export class AuthService {
   generateTokens(user: IUser) {
     const { id, email } = user;
 
-    const accessToken = this.jwtService.sign(
-      {
-        id,
-        email,
-      },
-      this.accessTokenConfig.signOptions,
-    );
+    const accessToken = this.jwtService.sign({
+      id,
+      email,
+    });
 
     const refreshToken = this.jwtService.sign(
       {
